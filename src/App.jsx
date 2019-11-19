@@ -1,5 +1,4 @@
 import React from 'react'
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -7,8 +6,11 @@ class App extends React.Component {
       employees: [],
       isLoading: true,
       employeesAreFetched: false,
-      open: false
+      open: false,
+      saving:""
     }
+    this.SubmitForm = this.SubmitForm.bind(this);
+
   }
   componentDidMount() {
     fetch('http://localhost:3004/employees')
@@ -17,6 +19,26 @@ class App extends React.Component {
       .then(() => this.setState({ employeesAreFetched: true }))
       .then(() => this.setState({ isLoading: false }));
   }
+  SubmitForm(event){
+    event.preventDefault();
+    const data = new FormData(event.target);
+    this.setState({saving:"Saving..."})
+    fetch('http://localhost:3004/employees', {
+          method: "POST",
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id:Math.random().toString(16).substr(2,12)+Math.random().toString(16).substr(2,12),
+            isActive: data.get("isActive") ? true : false,
+            age: Number(data.get("age")),
+            name: data.get("name"),
+            company: data.get("company"),
+            email: data.get("email")
+          })
+        })
+          .then(response => response.json())
+          .then(() => this.componentDidMount())   
+          .then(() => this.setState({saving:"Saved"}))
+  }
   render() {
     console.log('render was fired');
     return (
@@ -24,35 +46,39 @@ class App extends React.Component {
         {<>{this.state.isLoading ? "Loading..." : ("Loaded:" + this.state.employees.length.toString())}</>}
         <button onClick={() => { this.setState({ open: true }) }} >Add employee</button>
         {this.state.open &&
-          <form >
+          <form onSubmit={this.SubmitForm}>
             <label>
               Name:
-    <input type="text" name="name" />
             </label>
+            <input type="text" name="name" />
             <br />
             <label>
               Email:
-    <input type="text" name="email" />
             </label>
+            <input type="text" name="email" />
             <br />
             <label>
               Company:
-    <input type="text" name="company" />
             </label>
+            <input type="text" name="company" />
             <br />
             <label>
               Age:
-    <input type="text" name="age" />
             </label>
+            <input type="text" name="age" />
             <br />
             <label>
               isActive:
-    <input type="text" name="isActive" />
             </label>
+            <input type="checkbox" name="isActive" />
             <br />
             <input type="submit" value="Submit" />
-            <button onClick={() => { this.setState({ open: false }) }} >Cancel</button>
+            <button onClick={() => { this.setState({ open: false }),this.setState({saving:""}) }} >Cancel</button>
+            <br/>
+            <label>{this.state.saving}</label>
           </form>
+
+     
         }
       </div>
     )
