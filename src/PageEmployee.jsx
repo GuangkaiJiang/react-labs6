@@ -1,6 +1,7 @@
 import React from 'react';
-import{Link} from "react-router-dom";
-class Form extends React.Component {
+import{Link,withRouter} from "react-router-dom";
+
+class PageEmployee extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -26,7 +27,8 @@ this.handleReset=this.handleReset.bind(this);
               })
             })
               .then(response => response.json())
-              .then(() => this.setState({saving:"Saved"}));
+              .then(() => this.setState({saving:"Saved"}))
+              .then(() => {this.props.history.push("/")});
       }
       handleReset(){
         this.myFormRef.reset();
@@ -79,4 +81,4 @@ render()
 
 
 }
-export default Form
+export default withRouter(PageEmployee)

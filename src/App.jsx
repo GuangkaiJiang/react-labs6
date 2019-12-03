@@ -7,7 +7,7 @@ import{
 } from "react-router-dom";
 
 import PageEmployeesList from './PageEmployeesList';
-import Form from './Form';
+import PageEmployee from './PageEmployee';
 
 const App=()=>(
     <Router>
@@ -16,7 +16,7 @@ const App=()=>(
             <PageEmployeesList/>
             </Route>
             <Route exact path="/new">
-            <Form/>
+            <PageEmployee/>
             </Route>
         </Switch>
     </Router>
