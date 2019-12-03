@@ -3,10 +3,10 @@ class Form extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            open: false,
             saving:""
         }
 this.SubmitForm=this.SubmitForm.bind(this);
+this.handleReset=this.handleReset.bind(this);
       }
       SubmitForm(event){
         event.preventDefault();
@@ -27,15 +27,17 @@ this.SubmitForm=this.SubmitForm.bind(this);
               .then(response => response.json())
               .then(() => this.setState({saving:"Saved"}));
       }
-
+      handleReset(){
+        this.myFormRef.reset();
+        this.setState({saving:""});
+      }
+    
 render()
 {
     return (
 
           <div style={{ borderStyle: 'solid', borderWidth: 5, margin: 20 }}> 
-          <button onClick={() => { this.setState({ open: true }) }} >Add employee</button>
-          {this.state.open &&
-            <form onSubmit={(e)=>this.SubmitForm(e)}>
+            <form ref={(el) => this.myFormRef = el} onSubmit={(e)=>this.SubmitForm(e)}>
               <label>
                 Name:
               </label>
@@ -62,11 +64,10 @@ render()
               <input type="checkbox" name="isActive" />
               <br />
               <input type="submit" value="Submit" />
-              <button onClick={()=>this.setState({open:false,saving:""})} >Cancel</button>
-              <br/>
-              <label>{this.state.saving}</label>
             </form>
-          }
+            <button onClick={this.handleReset}>Reset</button>
+            <br/>
+            <label>{this.state.saving}</label>
           </div>
 
       )
