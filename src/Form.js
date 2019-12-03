@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import{Link} from "react-router-dom";
 class Form extends React.Component {
     constructor(props) {
         super(props);
@@ -68,6 +69,7 @@ render()
             <button onClick={this.handleReset}>Reset</button>
             <br/>
             <label>{this.state.saving}</label>
+            <button><Link to="/">Go Back</Link></button>
           </div>
 
       )
